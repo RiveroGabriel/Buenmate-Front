@@ -1,0 +1,103 @@
+<section class="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
+
+  <!-- Encabezado -->
+  <div class="flex items-center justify-between">
+    <div>
+      <h1 class="text-3xl font-black text-stone-800">Panel de Administración</h1>
+      <p class="mt-1 text-sm text-stone-500">Gestión de pedidos de BuenMate</p>
+    </div>
+    <span class="text-2xl">🧉</span>
+  </div>
+
+  <!-- Tarjetas de estadísticas -->
+  <div class="mt-8 grid gap-4 grid-cols-[repeat(auto-fit,minmax(180px,1fr))]">
+
+    <div class="rounded-2xl border border-[#eae3d9] bg-white p-5">
+      <p class="text-sm text-stone-500">Pedidos</p>
+      <p class="mt-1 text-3xl font-black text-stone-800">{{ totalPedidos }}</p>
+    </div>
+
+    <div class="rounded-2xl border border-[#eae3d9] bg-white p-5">
+      <p class="text-sm text-stone-500">Pendientes</p>
+      <p class="mt-1 text-3xl font-black text-yellow-600">{{ pendientes }}</p>
+    </div>
+
+    <div class="rounded-2xl border border-[#eae3d9] bg-white p-5">
+      <p class="text-sm text-stone-500">Pagados</p>
+      <p class="mt-1 text-3xl font-black text-green-600">{{ pagados }}</p>
+    </div>
+
+    <div class="rounded-2xl border border-[#eae3d9] bg-white p-5">
+      <p class="text-sm text-stone-500">Ingresos</p>
+      <p class="mt-1 text-3xl font-black text-[#c1502e]">${{ ingresos }}</p>
+    </div>
+
+  </div>
+
+  <!-- Buscador -->
+  <div class="mt-8">
+    <input
+      type="text"
+      [(ngModel)]="busqueda"
+      placeholder="🔍 Buscar por cliente..."
+      class="w-full rounded-xl border border-[#eae3d9] bg-white px-4 py-2.5 text-sm text-stone-700 outline-none transition focus:border-[#c1502e] sm:w-80"
+    />
+  </div>
+
+  @if(cargando) {
+    <p class="mt-8 text-stone-500">Cargando pedidos...</p>
+  }
+
+  @if(!cargando && pedidosFiltrados.length === 0) {
+    <div class="mt-8 rounded-2xl border border-[#eae3d9] bg-white p-10 text-center text-stone-500">
+      No hay pedidos.
+    </div>
+  }
+
+  @if(!cargando && pedidosFiltrados.length > 0) {
+    <div class="mt-6 overflow-x-auto rounded-2xl border border-[#eae3d9] bg-white">
+      <table class="w-full text-left">
+        <thead class="bg-[#f7f4ef]">
+          <tr class="text-xs uppercase tracking-wide text-stone-500">
+            <th class="p-4">Pedido</th>
+            <th class="p-4">Cliente</th>
+            <th class="p-4">Fecha</th>
+            <th class="p-4">Total</th>
+            <th class="p-4">Estado</th>
+            <th class="p-4">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for(pedido of pedidosFiltrados; track pedido.id) {
+            <tr class="border-t border-[#eae3d9]">
+              <td class="p-4 font-bold text-stone-800">#{{ pedido.id }}</td>
+              <td class="p-4">
+                <span class="text-stone-800">{{ pedido.usuarioNombre }}</span><br>
+                <span class="text-sm text-stone-400">{{ pedido.usuarioEmail }}</span>
+              </td>
+              <td class="p-4 text-stone-500">{{ pedido.fecha }}</td>
+              <td class="p-4 font-semibold text-stone-800">${{ pedido.total }}</td>
+              <td class="p-4">
+                <span
+                  class="rounded-full px-3 py-1 text-xs font-bold"
+                  [ngClass]="pedido.estado === 'PAGADO' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'">
+                  {{ pedido.estado }}
+                </span>
+              </td>
+              <td class="p-4">
+                @if(pedido.estado === 'PENDIENTE') {
+                  <button (click)="marcarPagado(pedido.id)" class="rounded-lg bg-[#c1502e] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#a8451f]">
+                    Marcar pagado
+                  </button>
+                } @else {
+                  <span class="text-sm text-stone-400">—</span>
+                }
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+
+</section>

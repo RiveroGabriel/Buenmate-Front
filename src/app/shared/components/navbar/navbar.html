@@ -1,0 +1,38 @@
+<header class="sticky top-0 z-50 border-b border-[#eae3d9] bg-white/90 backdrop-blur">
+  <div class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
+
+    <a routerLink="/" class="flex items-center gap-2 text-xl font-black tracking-tight text-stone-800">
+      <span class="text-2xl">🧉</span> BuenMate
+    </a>
+
+    <nav class="flex items-center space-x-1">
+      <a routerLink="/" class="rounded-lg px-3 py-2 text-sm font-medium text-stone-600 transition hover:bg-[#f2ede6] hover:text-stone-900">
+        Productos
+      </a>
+
+      @if(authService.isLoggedIn()) {
+        <button (click)="logout()" class="rounded-lg px-3 py-2 text-sm font-medium text-stone-600 transition hover:bg-[#f2ede6] hover:text-stone-900">
+          Cerrar sesión
+        </button>
+      } @else {
+        <a routerLink="/login" class="rounded-lg px-3 py-2 text-sm font-medium text-stone-600 transition hover:bg-[#f2ede6] hover:text-stone-900">
+          Iniciar sesión
+        </a>
+      }
+
+      <a routerLink="/admin/pedidos" class="rounded-lg px-3 py-2 text-sm font-medium text-stone-600 transition hover:bg-[#f2ede6] hover:text-stone-900">
+        Admin
+      </a>
+
+      <a routerLink="/checkout" class="flex items-center gap-2 rounded-lg border border-[#eae3d9] px-3 py-2 text-sm font-medium text-stone-700 transition hover:bg-[#f2ede6]">
+        <span>🛒 Carrito</span>
+        @if(carritoService.contarItems() > 0) {
+          <span class="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-[#c1502e] px-1.5 text-xs font-bold text-white">
+            {{ carritoService.contarItems() }}
+          </span>
+        }
+      </a>
+    </nav>
+
+  </div>
+</header>
